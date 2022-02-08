@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using TestsAppCoreMVC.Data;
 using TestsAppCoreMVC.Models;
 
 namespace TestsAppCoreMVC.Controllers
@@ -12,14 +14,20 @@ namespace TestsAppCoreMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _ctx;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AppDbContext ctx)
         {
             _logger = logger;
+            _ctx = ctx;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var tests = await _ctx.Tests
+                .Include(p => p.Questions)
+                .ThenInclude(p => p.Answers)
+                .ToListAsync();
             return View();
         }
 
