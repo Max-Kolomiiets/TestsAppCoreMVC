@@ -14,11 +14,10 @@
         <br />
     </div>
 }
-<button id="#nextBtn" class="btn btn-success" onclick="nextQuestion()">Next</button>
+<button id="nextBtn" class="btn btn-success" onclick="nextQuestion()">Next</button>
 
 @section Scripts {
     <script>
-        
 
         var totalQuestions = $('.questions').length;
         var currentQuestion = 0;
@@ -29,37 +28,20 @@
 
         $($questions.get(currentQuestion)).fadeIn();
 
-        //$('#nextBtn').click(function () {
-
-        //    console.log("#next click")
-        //    $($questions.get(currentQuestion)).fadeOut(function () {
-        //        currentQuestion = currentQuestion + 1;
-
-        //        if (currentQuestion == totalQuestions) {
-        //            var result = sum_values()
-        //            alert(result);
-        //        } else {
-        //            $($questions.get(currentQuestion)).fadeIn();
-        //        }
-        //    });
-
-        //});
-
         function nextQuestion() {
-            console.log("#next click")
+            
             $($questions.get(currentQuestion)).fadeOut(function () {
                 currentQuestion += 1;
 
-                if (currentQuestion == totalQuestions) {
-                    var result = sum_values()
-                    alert(result);
-                } else {
+                if ((currentQuestion + 1) == totalQuestions) {
+                    $("#nextBtn").html("Finish");
+                    $($questions.get(currentQuestion)).fadeIn();
+                } else if (currentQuestion == totalQuestions)
+                    document.location = "/";
+                else {
                     $($questions.get(currentQuestion)).fadeIn();
                 }
             });
-        }
-
-
-         
+        }   
     </script>
 }
