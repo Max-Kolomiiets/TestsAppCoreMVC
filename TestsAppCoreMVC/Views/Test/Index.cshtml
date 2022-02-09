@@ -7,7 +7,7 @@
         <div class="border border-success p-3">
             @foreach (var answer in question.Answers)
             {
-                <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name" onclick="handleRadioBtnClick(this);">
+                <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name" onclick="handleRadioBtnClick(this);" data-isCorrect="@answer.IsCorrect">
                 <label for="answer_@answer.Id">@answer.Name</label><br>
             }
         </div>
@@ -21,7 +21,10 @@
 
         var totalQuestions = $('.questions').length;
         var currentQuestion = 0;
-        console.log(totalQuestions);
+
+        var userPoints = 0;
+        var isCorrectAnswer = false;
+
 
         $questions = $('.questions');
         $questions.hide();
@@ -32,22 +35,35 @@
             
             $($questions.get(currentQuestion)).fadeOut(function () {
                 currentQuestion += 1;
+                if (isCorrectAnswer)
+                    userPoints++;
 
                 if ((currentQuestion + 1) == totalQuestions) {
                     $("#nextBtn").html("Finish");
                     $($questions.get(currentQuestion)).fadeIn();
                     $("#nextBtn").prop("disabled", true);
-                } else if (currentQuestion == totalQuestions)
+                } else if (currentQuestion == totalQuestions) {
+                    alert(`You earned ${userPoints} / ${totalQuestions}`);
                     document.location = "/";
+                }
                 else {
                     $($questions.get(currentQuestion)).fadeIn();
                     $("#nextBtn").prop("disabled", true);
                 }
+
+                isCorrectAnswer = false;
             });
         }
 
         function handleRadioBtnClick(radio) {
-            console.log(radio.value);
+            let isCorrect = radio.dataset.iscorrect;
+            if (isCorrect == 'True') {
+                isCorrectAnswer = true;
+                console.log(isCorrect, 'correct');
+            } else {
+                isCorrectAnswer = false;
+                console.log(isCorrect, 'incorrect');
+            }
             $("#nextBtn").removeAttr('disabled');
         }
     </script>

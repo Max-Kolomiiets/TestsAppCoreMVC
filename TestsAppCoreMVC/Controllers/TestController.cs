@@ -24,6 +24,9 @@ namespace TestsAppCoreMVC.Controllers
             return View(test);
         }
 
-
+        public IActionResult Result()
+        {
+            return View();
+        }
     }
 }
