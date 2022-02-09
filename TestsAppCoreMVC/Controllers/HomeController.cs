@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,8 +24,9 @@ namespace TestsAppCoreMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var tests = await _ctx.Tests
+           var tests = await _ctx.Tests
                 .Include(p => p.Questions)
+                .Take(3)
                 .ToListAsync();
             return View(tests);
         }

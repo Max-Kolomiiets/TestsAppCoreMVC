@@ -9,7 +9,6 @@
             {
                 <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name" onclick="handleRadioBtnClick(this);" data-isCorrect="@answer.IsCorrect">
                 <label for="answer_@answer.Id">@answer.Name</label><br>
-               
             }
         </div>
         <br />
@@ -44,12 +43,11 @@
                     $($questions.get(currentQuestion)).fadeIn();
                     $("#nextBtn").prop("disabled", true);
                 } else if (currentQuestion == totalQuestions) {
-                    alert(`You earned ${userPoints} / ${totalQuestions}`);
                     $questions.hide();
                     $("#nextBtn").hide();
                     $("#nextBtn").after(`
-                        <h2 class="text-center">You earned ${userPoints} / ${totalQuestions}</h2>
-                        <a class="btn btn-primary" href="/">Back to Tests</a>
+                        <h2 class="text-center mt-4">Correct Answers: ${userPoints} / ${totalQuestions}</h2>
+                        <a class="btn btn-primary mt-2" href="/">Back to Tests</a>
                     `);
                 }
                 else {

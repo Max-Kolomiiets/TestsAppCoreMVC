@@ -57,6 +57,11 @@
                 $("#btn-proceed").attr("disabled", !e.currentTarget.checked);
             });
 
+        $("#modal").on("hide.bs.modal", function () {
+            $("#checkbox").prop('checked', false);
+            $("#btn-proceed").attr("disabled", true);
+        });
+
         function testInfo(id) {
             console.log(id);
 
