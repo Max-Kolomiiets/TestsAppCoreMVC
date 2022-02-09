@@ -2,13 +2,64 @@
 
 @foreach (var question in Model.Questions)
 {
-    <div class="text-center font-weight-bold">@question.Name</div>
-    <div class="border border-success p-3">
-        @foreach (var answer in question.Answers)
-        {
-            <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name">
-            <label for="answer_@answer.Id">@answer.Name</label><br>
-        }
+    <div class="questions">
+        <div class="text-center font-weight-bold">@question.Name</div>
+        <div class="border border-success p-3">
+            @foreach (var answer in question.Answers)
+            {
+                <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name">
+                <label for="answer_@answer.Id">@answer.Name</label><br>
+            }
+        </div>
+        <br />
     </div>
-    <br/>
+}
+<button id="#nextBtn" class="btn btn-success" onclick="nextQuestion()">Next</button>
+
+@section Scripts {
+    <script>
+        
+
+        var totalQuestions = $('.questions').length;
+        var currentQuestion = 0;
+        console.log(totalQuestions);
+
+        $questions = $('.questions');
+        $questions.hide();
+
+        $($questions.get(currentQuestion)).fadeIn();
+
+        //$('#nextBtn').click(function () {
+
+        //    console.log("#next click")
+        //    $($questions.get(currentQuestion)).fadeOut(function () {
+        //        currentQuestion = currentQuestion + 1;
+
+        //        if (currentQuestion == totalQuestions) {
+        //            var result = sum_values()
+        //            alert(result);
+        //        } else {
+        //            $($questions.get(currentQuestion)).fadeIn();
+        //        }
+        //    });
+
+        //});
+
+        function nextQuestion() {
+            console.log("#next click")
+            $($questions.get(currentQuestion)).fadeOut(function () {
+                currentQuestion += 1;
+
+                if (currentQuestion == totalQuestions) {
+                    var result = sum_values()
+                    alert(result);
+                } else {
+                    $($questions.get(currentQuestion)).fadeIn();
+                }
+            });
+        }
+
+
+         
+    </script>
 }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TestsAppCoreMVC.Data;
 
@@ -16,7 +13,7 @@ namespace TestsAppCoreMVC.Controllers
             _ctx = ctx;
         }
 
-        [Route("[controller]/[action]/{id}")]
+        [Route("[controller]/{id}")]
         public async Task<IActionResult> Index(int? id)
         {
             var test = await _ctx.Tests
