@@ -37,7 +37,7 @@
                     <div class="modal-footer">
                         <input type="checkbox" id="checkbox" name="agreement" >
                         <label for="checkbox">I agree to start</label><br>
-                        <button id="btn-proceed" class="btn btn-primary" onclick="proceed()" disabled>Proceed</button>
+                        <button id="btn-proceed" class="btn btn-primary" onclick="proceed()" disabled data-testId="0">Proceed</button>
                     </div>
                 </div>
             </div>
@@ -72,10 +72,12 @@
                     console.log(err);
                 }
             });
+            $('#btn-proceed').data('testId', id);
         }
 
         function proceed() {
-            document.location = 'Test/Index/2'
+            let id = $('#btn-proceed').data('testId');
+            document.location = `Test/Index/${id}`;
         }
     </script>
 }
