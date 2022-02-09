@@ -1,66 +1,81 @@
 ﻿@model IList<Test>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Tests";
 }
 
-<div class="container">
-    <div class="card-deck">
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+<div class="card-columns" style="display: inline-block">
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var test in Model)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@test.Name</h5>
+                    <div class="text-center">
+                        <button class="btn btn-success test-btn" data-toggle="modal" data-target="#modal" onclick="testInfo(@test.Id)">Start</button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">count questions : @test?.Questions?.Count</small>
+                </div>
+            </div>
+        }
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">About the Test</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <input type="checkbox" id="checkbox" name="agreement">
+                        <label for="checkbox">I agree to start</label><br>
+                        <button id="btn-proceed" type="button" class="btn btn-primary" onclick="onTestClick()" disabled>Proceed</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-    </div>
+    }
+    else
+    {
+        <h2 class="text-center">No Tests Yet!</h2>
+    }
+
 </div>
 
+@section Scripts {
+    <script>
+            $("#checkbox").click(e => {
+                console.log("#checkbox clicking")
+                $("#btn-proceed").attr("disabled", !e.currentTarget.checked);
+            });
+
+        function testInfo(id) {
+            console.log(id);
+
+            $.ajax({
+                type: 'GET',
+                url: `/Home/GetTestById/${id}`,
+                success: function (result) {
+                    console.log(result);
+                    let desc = result.description;
+                    $(".modal-body").html(desc);
+                },
+                error: err => {
+                    console.log(err);
+                }
+            });
+        }
+
+        function onTestClick() {
+
+        }
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,13 +23,21 @@ namespace TestsAppCoreMVC.Controllers
             _ctx = ctx;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var tests = await _ctx.Tests
                 .Include(p => p.Questions)
-                .ThenInclude(p => p.Answers)
                 .ToListAsync();
-            return View();
+            return View(tests);
+        }
+
+        [Route("[controller]/[action]/{id}")]
+        public async Task<JsonResult> GetTestById(int id)
+        {
+            var test = await _ctx.Tests.FirstOrDefaultAsync(p => p.Id == id);
+            if (test == null) return Json(new { error = 404 });
+            return Json(test);
         }
 
         public IActionResult Privacy()

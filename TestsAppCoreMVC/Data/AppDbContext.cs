@@ -17,5 +17,15 @@ namespace TestsAppCoreMVC.Data
         public DbSet<Test> Tests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            TestData.Init(6);
+            modelBuilder.Entity<Test>().HasData(TestData.Tests);
+            modelBuilder.Entity<Question>().HasData(TestData.Questions);
+            modelBuilder.Entity<Answer>().HasData(TestData.Answers);
+        }
     }
 }

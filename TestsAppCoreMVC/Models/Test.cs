@@ -8,6 +8,7 @@ namespace TestsAppCoreMVC.Models
     public class Test : BaseModel
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public IList<Question> Questions { get; set; }
     }
 }
