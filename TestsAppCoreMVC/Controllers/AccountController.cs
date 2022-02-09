@@ -34,7 +34,7 @@ namespace TestsAppCoreMVC.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
                 if (user != null)
                 {
-                    await Authenticate(model.Email);
+                    await Authenticate(model.Email, user.Role);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -56,7 +56,8 @@ namespace TestsAppCoreMVC.Controllers
                 User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    db.Users.Add(new User { Email = model.Email, Password = model.Password });
+                    var newUser = new User { Email = model.Email, Password = model.Password };
+                    db.Users.Add(newUser);
                     await db.SaveChangesAsync();
 
                     await Authenticate(model.Email);
@@ -69,12 +70,12 @@ namespace TestsAppCoreMVC.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(string userName, string role="user")
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim("role", "user")
+                new Claim(ClaimTypes.Role, role)
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));

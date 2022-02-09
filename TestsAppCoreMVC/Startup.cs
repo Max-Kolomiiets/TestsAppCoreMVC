@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 using TestsAppCoreMVC.Data;
 
 namespace TestsAppCoreMVC
@@ -27,6 +28,11 @@ namespace TestsAppCoreMVC
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForVIP", policy => {
+                    policy.RequireClaim(ClaimTypes.Role, "VIP");
+                });
+            });
 
             services.AddControllersWithViews();
         }

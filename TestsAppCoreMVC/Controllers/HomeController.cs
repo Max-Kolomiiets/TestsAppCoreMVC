@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TestsAppCoreMVC.Data;
 using TestsAppCoreMVC.Models;
@@ -24,7 +26,15 @@ namespace TestsAppCoreMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-           var tests = await _ctx.Tests
+            List<Test> tests;
+            if (User.HasClaim(ClaimTypes.Role, "VIP"))
+            {
+                tests = await _ctx.Tests
+                .Include(p => p.Questions)
+                .ToListAsync();
+                return View(tests);
+            }
+           tests = await _ctx.Tests
                 .Include(p => p.Questions)
                 .Take(3)
                 .ToListAsync();
