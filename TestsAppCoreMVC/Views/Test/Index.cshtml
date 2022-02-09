@@ -1,3 +1,14 @@
 ﻿@model Test
 
-
+@foreach (var question in Model.Questions)
+{
+    <div class="text-center font-weight-bold">@question.Name</div>
+    <div class="border border-success p-3">
+        @foreach (var answer in question.Answers)
+        {
+            <input type="radio" id="answer_@answer.Id" name="answer_@question.Id" value="@answer.Name">
+            <label for="answer_@answer.Id">@answer.Name</label><br>
+        }
+    </div>
+    <br/>
+}

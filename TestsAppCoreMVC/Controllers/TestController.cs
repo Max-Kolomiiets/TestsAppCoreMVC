@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,15 @@ namespace TestsAppCoreMVC.Controllers
         {
             _ctx = ctx;
         }
-        public async Task<IActionResult> Index(int? testId)
-        {
-            var test = await _ctx.Tests.FindAsync(testId);
 
+        [Route("[controller]/[action]/{id}")]
+        public async Task<IActionResult> Index(int? id)
+        {
+            var test = await _ctx.Tests
+                .Include(p => p.Questions)
+                .ThenInclude(p => p.Answers)
+                .FirstOrDefaultAsync(p => p.Id == id);
+                
             return View(test);
         }
 
